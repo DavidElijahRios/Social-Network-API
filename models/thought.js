@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose');
+const reactionSchema = require('./reaction');
+const formatDate = require('../utils/helper');
 
 const thoughtSchema = new Schema(
     {
@@ -6,27 +8,38 @@ const thoughtSchema = new Schema(
            type: String, 
            required: true,
            maxLength: 280,
-           minlength: 1, 
+           minLength: 1, 
 
         },
-        // TODO: Need to figure out how to format timestamp
         createdAt: {
-            type: Date,
-            timestamps: true, 
-
+            type: Date, 
+            default: Date.now,
+              get: (date) => formatDate(date)
         },
-        // ? Would I need to reference the user in the users table?
         username: {
              type: String, 
              required: true,
         },
-        reactions: {
-        // TODO: Add reaction schema
+        reactions: [reactionSchema]
+    },
+    {
+        toJSON: {
+            virtuals: true,
         },
+        id: false,
     }
 );
 
-// TODO: Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query.
+
+thoughtSchema.virtual('reactionCount')
+
+.get(function () {
+    return this.reactions.length
+})
 
 
-// module.exports = ;
+
+// Converting schema into model to be used
+const Thought = model('thought', thoughtSchema);
+
+module.exports = Thought;

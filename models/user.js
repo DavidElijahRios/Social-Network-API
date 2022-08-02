@@ -44,16 +44,12 @@ const userSchema = new Schema(
     }
 );
 
-// TODO: need to finish virtual
-// ? Do I need to return this.friend.length to get number of friends? or will that return list of friends?
 userSchema.virtual('friendCount')
 // Getter
 .get(function () {
-    return `${this.friends}`;
+    return this.friends.length
 })
-.set(function (v) {
-    this.set({ friends });
-})
+
 
 
 const User = model('user', userSchema);

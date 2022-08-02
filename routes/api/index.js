@@ -1,7 +1,8 @@
 const router = require('express').Router();
-// TODO: need to add const variables for other routed folders in api routes folder 
+const thoughtRoutes = require('./thoughtRoutes');
+const userRoutes = require('./userRoutes');
 
-// TODO: need to call those routes with a route location and const variable
-
+router.use('/thoughts', thoughtRoutes);
+router.use('/users', userRoutes);
 
 module.exports = router;
