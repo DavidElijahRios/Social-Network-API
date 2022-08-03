@@ -37,10 +37,51 @@ async postNewUser(req, res) {
     }
 },
 
-// update a user by its id
+// ?update a user by its id ?what do I want to update and what would I need to pass?
+async updateUser(req, res) {
+    try {
+         const updateUser = await User.findByIdAndUpdate({
+            _id: req.params.id
+         });
+         res.status(200).json(updateUser);
+
+    } catch (err) {
+        res.status(500).json(err)
+    }
+},
+
 
 
 // remove user by its id
+async removeUser(req, res) {
+    try {
+        const removeUser = await User.findByIdAndDelete({
+            _id: req.params.id
+        });
+        res.status(200).json("User has been removed", removeUser)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+},
 
+
+// /api/users/:userId/friends/:friendId
+// ?add a new friend to a user's friend list
+async addNewFriend(req, res) {
+    try{
+        const addNewFriend = await User.findByIdAndUpdate()
+    } catch (err) {
+        res.status(500).json(err)
+    }
+},
+
+// ?remove a friend from a user's friend list
+async removeFriend(req, res) {
+    try {
+        const removeFriend = await User.findByIdAndDelete({})
+    } catch (err) {
+        res.status(500).json(err)
+    }
+},
 
 }

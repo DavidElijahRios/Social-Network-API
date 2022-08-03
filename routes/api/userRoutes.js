@@ -3,6 +3,10 @@ const {
     getUsers,
     getSingleUser,
     postNewUser,
+    updateUser,
+    removeUser,
+    addNewFriend,
+    removeFriend,
 } = require('../../controllers/userController');
 
 //  get all users
