@@ -17,7 +17,7 @@ async getUsers(req, res) {
 
 // Get a single user by it's id & populated thought and friend data
 getSingleUser(req, res) {
-       User.findById(req.params.id)
+       User.findById(req.params.userId)
        .then((user) => {
         if (!user) {
             res.status(400).json({ message: "No user found with that Id"})
@@ -41,7 +41,7 @@ async postNewUser(req, res) {
 async updateUser(req, res) {
     try {
          const updateUser = await User.findByIdAndUpdate({
-            _id: req.params.id
+            _id: req.params.userId
         },
         { 
             $set: req.body, 
@@ -60,14 +60,14 @@ async updateUser(req, res) {
 },
 
 
-
+// !not working and also working??
 // remove user by its id
 async removeUser(req, res) {
     try {
         const removeUser = await User.findByIdAndDelete({
-            _id: req.params.id
+            _id: req.params.userId
         });
-        res.status(200).json("User has been removed", removeUser)
+        res.status(200).json(removeUser)
     } catch (err) {
         res.status(500).json(err)
     }
@@ -75,16 +75,17 @@ async removeUser(req, res) {
 
 
 // /api/users/:userId/friends/:friendId
-// add a new friend to a user's friend list
+// add a new friend to a user's friend list ?CREATE???
 async addNewFriend(req, res) {
     try{
         const addNewFriend = await User.findByIdAndUpdate({
-            _id: req.params.id
+            _id: req.params.userId
         },
         { $addToSet: { friends: req.params.friendId} },
         {
             new: true,
         });
+        res.status(200).json(addNewFriend);
     } catch (err) {
         res.status(500).json(err)
     }
@@ -93,14 +94,17 @@ async addNewFriend(req, res) {
 // remove a friend from a user's friend list
 async removeFriend(req, res) {
     try {
-        const removeFriend = await User.findByIdAndDelete({
-            _id: req.params.id
+        const removeFriend = await User.findByIdAndUpdate({
+            _id: req.params.userId
         },
         { $pull: { friends: req.params.friendId} },
         {
             new: true,
         });
+        res.status(200).json(removeFriend);
+        
     } catch (err) {
+        console.log(err)
         res.status(500).json(err)
     }
 },

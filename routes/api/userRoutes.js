@@ -9,9 +9,15 @@ const {
     removeFriend,
 } = require('../../controllers/userController');
 
-//  get all users
+//  GET all users & POST new user
 router.route('/').get(getUsers).post(postNewUser)
 
-// Need to bring in controller routes to create routes with const variable and {} and require userController.js
+// GET, UPDATE, & DELETE single user by id
+router.route('/:userId').get(getSingleUser).put(updateUser).delete(removeUser);
+
+// POST & DELETE a new friend to user's friend list
+router.route('/:userId/friends/:friendId').put(addNewFriend).delete(removeFriend);
+
+
 
 module.exports = router;
