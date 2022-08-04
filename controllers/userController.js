@@ -37,12 +37,21 @@ async postNewUser(req, res) {
     }
 },
 
-// ?update a user by its id ?what do I want to update and what would I need to pass?
+// ?Check
 async updateUser(req, res) {
     try {
          const updateUser = await User.findByIdAndUpdate({
             _id: req.params.id
-         });
+        },
+        { 
+            $set: req.body, 
+        },
+        {
+            runValidators: true,
+            new: true,
+        }
+
+        );
          res.status(200).json(updateUser);
 
     } catch (err) {
@@ -66,19 +75,31 @@ async removeUser(req, res) {
 
 
 // /api/users/:userId/friends/:friendId
-// ?add a new friend to a user's friend list
+// add a new friend to a user's friend list
 async addNewFriend(req, res) {
     try{
-        const addNewFriend = await User.findByIdAndUpdate()
+        const addNewFriend = await User.findByIdAndUpdate({
+            _id: req.params.id
+        },
+        { $addToSet: { friends: req.params.friendId} },
+        {
+            new: true,
+        });
     } catch (err) {
         res.status(500).json(err)
     }
 },
 
-// ?remove a friend from a user's friend list
+// remove a friend from a user's friend list
 async removeFriend(req, res) {
     try {
-        const removeFriend = await User.findByIdAndDelete({})
+        const removeFriend = await User.findByIdAndDelete({
+            _id: req.params.id
+        },
+        { $pull: { friends: req.params.friendId} },
+        {
+            new: true,
+        });
     } catch (err) {
         res.status(500).json(err)
     }
