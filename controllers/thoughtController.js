@@ -1,6 +1,7 @@
 const { User, Thought } = require('../models');
-// ?does object id go here? because of the assignment?
 const { ObjectId } = require('mongoose').Types;
+
+
 
 module.exports = {
 
@@ -24,11 +25,18 @@ async getSingleThought(req, res) {
     }
 },
 
-    // ?post to create a new thought (don't forget to ?push? the created thought's id to the associated users thoughts array field)
 async newThought(req, res) {
     try {
        const newThought = await Thought.create(req.body);
+       const updateUserThought = await User.findByIdAndUpdate({
+        _id: req.body.userId
+       },
+       { $addToSet: { thoughts: newThought._id} },
+       {
+         new: true,
+       });
        res.status(200).json(newThought);
+       console.log(newThought)
     } catch (err) {
         res.status(500).json(err)
     }
@@ -37,7 +45,18 @@ async newThought(req, res) {
     // update a thought by it's id
 async updateThought(req, res) {
     try {
-
+       const updateThought = await Thought.findByIdAndUpdate({
+        _id: req.params.thoughtId
+       },
+       {
+          $set: req.body,
+       },
+       {
+         runValidators: true,
+         new: true,
+       }
+       );
+       res.status(200).json(updateThought);
     } catch (err) {
         res.status(500).json(err)
     }
@@ -47,9 +66,9 @@ async updateThought(req, res) {
 async removeThought(req, res) {
     try {
         const removeThought = await Thought.findByIdAndDelete({ 
-            _id: req.params.id
+            _id: req.params.thoughtId
         });
-        res.status(200).json("thought has been removed", removeThought);
+        res.status(200).json(removeThought);
     } catch (err) {
         res.status(500).json(err)
     }
@@ -57,11 +76,36 @@ async removeThought(req, res) {
 
     
     // api/thoughts/:thoughtId/reactions
-    // ?create a reaction stored in a single thoughts reactions array field
+    async addNewReaction(req, res) {
+        try {
+            const addNewReaction = await Thought.findOneAndUpdate({
+                _id: req.params.thoughtId
+            },
+            { $addToSet: { reactions: req.body } },
+            {
+                new: true
+            });
+            res.status(200).json(addNewReaction);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
 
-
-    // ?Delete to pull and remove a reaction by the reactions reaction Id value
-
-
+  async deleteReaction(req, res) {
+    try {
+         const deleteReaction = await Thought.findByIdAndUpdate({
+            _id: req.params.thoughtId
+         },
+         { $pull: { reactions: req.body }},
+         {
+            new: true,
+         });
+         console.log(deleteReaction)
+         res.status(200).json(deleteReaction)
+    } catch (err) {
+        res.status(500).json(err)
+        console.log(err)
+    }
+  }
 
 }

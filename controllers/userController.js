@@ -37,7 +37,7 @@ async postNewUser(req, res) {
     }
 },
 
-// ?Check
+// update a user 
 async updateUser(req, res) {
     try {
          const updateUser = await User.findByIdAndUpdate({
@@ -60,7 +60,6 @@ async updateUser(req, res) {
 },
 
 
-// !not working and also working??
 // remove user by its id
 async removeUser(req, res) {
     try {
@@ -75,7 +74,7 @@ async removeUser(req, res) {
 
 
 // /api/users/:userId/friends/:friendId
-// add a new friend to a user's friend list ?CREATE???
+// add a new friend to a user's friend list
 async addNewFriend(req, res) {
     try{
         const addNewFriend = await User.findByIdAndUpdate({
@@ -91,7 +90,7 @@ async addNewFriend(req, res) {
     }
 },
 
-// remove a friend from a user's friend list
+// remove a friend from a user's friend list (update not delete)
 async removeFriend(req, res) {
     try {
         const removeFriend = await User.findByIdAndUpdate({

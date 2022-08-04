@@ -5,8 +5,21 @@ const {
     newThought,
     updateThought,
     removeThought,
+    addNewReaction,
+    deleteReaction,
 } = require('../../controllers/thoughtController');
 
-// Need to bring in controller routes to create routes with const variable and {} and require thoughtController.js
+// GET all thoughts
+router.route('/').get(getThoughts).post(newThought);
+
+// POST a new Thought
+// router.route('/').post(newThought);
+
+// GET, UPDATE, POST & DELETE single thought by id
+router.route('/:thoughtId').get(getSingleThought).put(updateThought).delete(removeThought);
+
+// POST & DELETE a reaction
+router.route('/:thoughtId/reactions').post(addNewReaction).delete(deleteReaction);
+
 
 module.exports = router;
