@@ -18,7 +18,7 @@ async getThoughts(req, res) {
     // get a single thought by its id
 async getSingleThought(req, res) {
     try {
-        const getSingleThought = await Thought.findById(req.params.id);
+        const getSingleThought = await Thought.findById(req.params.thoughtId);
         res.status(200).json(getSingleThought);
     } catch (err) {
         res.status(500).json(err)
